@@ -1,6 +1,9 @@
 package com.example.projectproposal.security;
 
 import java.nio.charset.StandardCharsets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -17,6 +20,9 @@ public class JwtService {
   private final byte[] keyBytes;
   private final String issuer;
   private final long expMillis;
+  private static final Logger log = LoggerFactory.getLogger(JwtService.class);
+
+  
 
   public JwtService(
       @Value("${app.jwt.secret}") String secret,

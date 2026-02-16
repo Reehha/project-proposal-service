@@ -46,14 +46,20 @@ public class SecurityConfig {
   // ✅ Global CORS config
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(List.of("http://localhost:4200"));
-    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    config.setAllowedHeaders(List.of("*"));
-    config.setAllowCredentials(true);
+      CorsConfiguration config = new CorsConfiguration();
+      // Allow your frontend domain when deployed
+      config.setAllowedOrigins(List.of(
+          "http://localhost:4200",  // Local development
+          "https://your-frontend.railway.app"  // Add your frontend Railway URL here
+      ));
+      config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+      config.setAllowedHeaders(List.of("*"));
+      config.setExposedHeaders(List.of("Authorization"));
+      config.setAllowCredentials(true);
+      config.setMaxAge(3600L);
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
-    return source;
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", config);
+      return source;
   }
 }
