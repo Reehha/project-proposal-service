@@ -1,5 +1,7 @@
 package com.example.projectproposal.repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -26,4 +28,13 @@ public class ProjectRepository {
   public Optional<ProjectProposal> findById(String pid) {
     return Optional.ofNullable(table.getItem(r -> r.key(k -> k.partitionValue(pid))));
   }
+
+  // ✅ NEW: Scan and return ALL projects
+  public List<ProjectProposal> findAll() {
+    List<ProjectProposal> list = new ArrayList<>();
+    table.scan().items().forEach(list::add);
+    return list;
+  }
+
+
 }
