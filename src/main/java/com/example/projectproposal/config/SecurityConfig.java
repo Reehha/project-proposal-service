@@ -52,7 +52,7 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(List.of(
             "http://localhost:4200",
-            "https://your-frontend-domain.com"
+            "https://masirat-proposal-generator-engine-u.vercel.app"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
