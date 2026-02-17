@@ -12,8 +12,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.projectproposal.security.JwtAuthFilter;
+
 @Configuration
 public class SecurityConfig {
+
+    private final JwtAuthFilter jwtAuthFilter;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -24,11 +34,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> {}) // ✅ ENABLE CORS
+            .cors(cors -> {}) // ✅ keep your CORS config
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .anyRequest().permitAll()
-            );
+                .requestMatchers("/api/auth/**").permitAll()        // ✅ login/register open
+                .requestMatchers("/api/projects/**").authenticated() // 🔒 protect ALL project endpoints
+                .anyRequest().permitAll()                            // leave rest unchanged
+            )
+            // ✅ Add JWT filter BEFORE Spring's auth filter
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -37,10 +50,9 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // ⚠️ In dev you can allow all, in prod restrict to your frontend domain
         config.setAllowedOrigins(List.of(
-            "http://localhost:4200",            // Angular dev
-            "https://your-frontend-domain.com"   // TODO: replace with your real frontend URL
+            "http://localhost:4200",
+            "https://your-frontend-domain.com"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

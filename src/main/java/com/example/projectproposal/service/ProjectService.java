@@ -126,4 +126,17 @@ public class ProjectService {
 		}
 		return out;
 	}
+	
+	public void delete(String pid, String currentUid) {
+		  var existing = projects.findById(pid)
+		      .orElseThrow(() -> new IllegalArgumentException("Project not found"));
+
+		  // ownership check (same as update/get)
+		  if (existing.getCreatedByUid() != null && !existing.getCreatedByUid().equals(currentUid)) {
+		    throw new SecurityException("Not allowed");
+		  }
+
+		  projects.deleteById(pid);
+		}
+
 }

@@ -49,4 +49,11 @@ public class ProjectController {
 		return ResponseEntity.ok(projects.getAll());
 	}
 
+	@DeleteMapping("/{pid}")
+	public ResponseEntity<Void> delete(@PathVariable String pid, Authentication auth) {
+	  String uid = (String) auth.getPrincipal();
+	  projects.delete(pid, uid);
+	  return ResponseEntity.noContent().build(); // 204 No Content
+	}
+
 }

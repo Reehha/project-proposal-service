@@ -35,6 +35,8 @@ public class ProjectRepository {
     table.scan().items().forEach(list::add);
     return list;
   }
-
+  public void deleteById(String pid) {
+	  table.deleteItem(r -> r.key(k -> k.partitionValue(pid)));
+	}
 
 }
