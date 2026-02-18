@@ -52,7 +52,8 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(List.of(
             "http://localhost:4200",
-            "https://masirat-proposal-generator-engine-u.vercel.app"
+            "https://masirat-proposal-generator-engine-u.vercel.app",
+            "https://masirat-proposal-generator-ui.vercel.app"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
